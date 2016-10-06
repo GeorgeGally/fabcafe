@@ -50,7 +50,7 @@ draw = function(){
     ctx.drawImage(video, -w,0, w, h);
     ctx.scale(-1.0, 1.0);
 
-    triangulate(30,30, 0.7); 
+    triangulate(22,22, 0.7); 
 
     ctx.restore();
 
@@ -122,7 +122,7 @@ function moveParticles(){
 				
 			}
 		
-			p.x2 = tween(p.x2, p.x + random(2), 20);
+			p.x2 = tween(p.x2, p.x + random(2), 40);
 
 			ctx.line(0, 0 - p.y, 0 - p.x2, 0);
 			ctx.line(0, 0 + p.y, 0 - p.x2, 0);

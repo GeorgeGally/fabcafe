@@ -1,66 +1,75 @@
 rbvj = function(){
-
-  ctx.background(0, 0.2);
-  pixel_size = 40;
+  samplesize = 20;
+  ctx.background(0);
+  pixel_size = 28;
   ctx.lineWidth = 0.5;
-  var max_particles = 2500;
   var particles = [];
-  samplesize = 15;
+  var max_particles = 1500;
 
-  draw = function() {
+draw = function() {
 
-    motionDetection();
-    ctx.background(0);
+  motionDetection();
+  ctx.background(0, 0.1);
+  ctx.scale(-1.0, 1.0);
+  ctx.drawImage(video, -w,0, w, h);
+  ctx.scale(-1.0, 1.0);
+  redFilter();
 
-    for (var j = 0; j < motion_array.length; j++) {
+  for (var j = 0; j < motion_array.length; j++) {
 
-      var m = motion_array[j];
-      var c = m.z;
-           
-      addParticle(m.x,m.y,c);
-      // addParticle(m.x+pixel_size/2,m.y+pixel_size/2,c);
-      // addParticle(m.x-pixel_size/2,m.y-pixel_size/2,c);
-      // addParticle(m.x-pixel_size/2,m.y,c);
-      // addParticle(m.x+pixel_size/2,m.y,c);
-      
-      
-      
+          var m = motion_array[j];
+          var c = m.z;
+          addParticle(m.x,m.y + random(-10, 10),c);
+          ctx.fillStyle = "black";
+          //ctx.fillRect(0, m.y + random(-10, 10), m.x/2, random(2, 5));
+          
   }
-  drawParticles();
+    mirror();
+    drawParticles();
+    }
+  
 
+function redFilter(){
+  var imageData = ctx.getImageData(0, 0, w, h);
+        var data = imageData.data;
+
+        for(var i = 0; i < data.length; i += 4) {
+          // red
+          data[i] = data[i]*2;
+          // green
+          data[i + 1] = 0;
+          // blue
+          data[i + 2] = data[i + 2];
+        }
+
+        // overwrite original image
+        ctx.putImageData(imageData, 0, 0);
 }
 
+
 function drawParticles(){
-  //ctx.fillStyle = rgb(0, 200, 0);
-  ctx.fillStyle = "#fff200";
   for (var i = 0; i < particles.length; i++) {
     p = particles[i];
-    p.x+=(p.target_x-p.x)/p.speedx;
-    p.y+=(p.target_y-p.y)/p.speedy;
-    // p.x += p.speedx;
-    // p.y += p.speedy;
-    p.sz *= 0.8;
-    //p.speedx += 5.1;
-    
-    ctx.fillEllipse(p.x,p.y,p.sz,p.sz);
-    ctx.fillEllipse(p.target_x,p.target_y,p.sz*0.8,p.sz*0.8);
-    p.target_x += 0.8;
-    if (p.sz < 0.1 || dist(p.x, p.y, p.target_x, p.target_y)<0.1) {
+    //p.x += p.speedx;
+    p.y += p.speedy;
+    p.sz *= 1.15;
+    p.speedx += 1.1;
+    ctx.fillStyle = "black";
+    ctx.fillRect(p.x,p.y,p.sz, 2);
+    if (p.y > h || p.sz > w || p.x > w) {
       particles.splice(i,1);
     }
+
   };
 }
 
 function addParticle(_x,_y, c){
   var particle = {
-    target_x: _x + random(-samplesize/2,samplesize/2),
-    target_y: _y + random(-samplesize/2,samplesize/2),
-    x: randomInt(w),
-    y: randomInt(h),
-    speedy: randomInt(5,20),
-    speedx: randomInt(5,20),
-
-    sz: random(5,12),
+    x: 0,
+    y: _y,
+    speedy: random(-4,4),
+    speedx: random(-5,-2),
+    sz: random(3,6),
     col: rgb(c.x)
   }
   particles.push(particle);
@@ -70,5 +79,7 @@ function addParticle(_x,_y, c){
 }
 
 }
+
+
 rbvj();
 
