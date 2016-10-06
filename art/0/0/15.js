@@ -2,8 +2,7 @@ rbvj = function(){
 
   ctx.background(0);
   pixel_size = w/6;
-  ctx.strokeStyle = "white";
-  ctx.lineWidth = 2;
+
 draw = function() {
 
   ctx.background(0);
@@ -35,7 +34,6 @@ draw = function() {
     ctx.clip();
     ctx.drawImage(video, 0, 0, w, h);
     ctx.restore(); 
-    ctx.HstrokeEllipse(x , y, pixel_size-20, pixel_size-20);
      }
       }
 

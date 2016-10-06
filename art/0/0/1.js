@@ -1,63 +1,69 @@
 rbvj = function(){
 
-  ctx.background(0);
-  pixel_size = 60;
+  ctx.background(0, 0.2);
+  pixel_size = 40;
+  ctx.lineWidth = 0.5;
+  var max_particles = 1500;
+  var particles = [];
+  ctx.strokeStyle = "white";
+  samplesize = 20;
 
-draw = function() {
-  
-  motionDetection();
+  draw = function() {
 
-  ctx.background(0);
-  ctx.fillStyle = "black";
-  //ctx.save();
+    motionDetection();
+    ctx.background(0);
 
-  ctx.fillRect(0, 0, w, h);
-  ctx.fillStyle = "white";
+    for (var j = 0; j < motion_array.length; j++) {
 
-  if (chance(500)) {
-      //pixel_size = Math.sin(frameCount/10000) * 32;
-      pixel_size = 2 + randomInt(1,10)*10;
-      //pixel_size = freqs[0]/4;
-      //freqs[0] = (pixel_size*3 + 25)%100;
-
-  }
-
-
-  // for (var x = 0; x < w; x += pixel_size) {    
-    
-  //   for (var y = 0; y < h; y += pixel_size) { 
-    
-      if (chance(940)) { 
-        ctx.fillRect(x , y, pixel_size, pixel_size);
-        var x = Math.round(random(w)/pixel_size)*pixel_size; 
-        var y = Math.round(random(h)/pixel_size)*pixel_size; 
-      }
-    // }
-    //   }
-
-      for (var j = 0; j < motion_array.length; j++) {
+      var m = motion_array[j];
+      var c = m.z;
+           
+      addParticle(m.x,m.y,c);
       
-          var m = motion_array[j];
+      
+      
+      
+  }
+  drawParticles();
 
-          var x = Math.round(m.x/pixel_size)*pixel_size; 
-          var y = Math.round(m.y/pixel_size)*pixel_size; 
+}
 
-            ctx.fillStyle = "white";
-            ctx.fillRect(x, y, pixel_size, pixel_size);
-
-
-
+function drawParticles(){
+  for (var i = 0; i < particles.length; i++) {
+    p = particles[i];
+    p.x += p.speedx;
+    p.y += p.speedy;
+    p.sz *= 0.95;
+    p.speedx += 2.1;
+    ctx.fillStyle = p.col;
+    ctx.fillEllipse(p.x,p.y,p.sz,p.sz);
+    if (p.y > h || p.sz < 0.8) {
+      particles.splice(i,1);
+    }
+      for (var j = i; j < particles.length; j++) {
+        pp = particles[j];
+        if (dist(p.x, p.y, pp.x, pp.y) < 30) {
+          ctx.line(p.x, p.y, pp.x, pp.y)
         }
-
-    
-
-
+      }
+  };
 }
 
-
-
-
+function addParticle(_x,_y, c){
+  var particle = {
+    x: _x,
+    y: _y,
+    speedy: random(-4,4),
+    speedx: random(-5,-2),
+    sz: random(3,6),
+    col: rgb(c.x)
+  }
+  particles.push(particle);
+  if(particles.length > max_particles) {
+        particles.splice(0,1);
+      }
 }
 
+}
 rbvj();
 

@@ -35,7 +35,7 @@ function drawParticles(){
     p.speedx += 2.1;
     ctx.fillStyle = p.col;
     ctx.fillEllipse(p.x,p.y,p.sz,p.sz);
-    if (p.y > h || p.sz < 0.8) {
+    if (p.y > h || p.y < 0 || p.x > w || p.sz < 0.5) {
       particles.splice(i,1);
     }
   };
@@ -47,8 +47,9 @@ function addParticle(_x,_y, c){
     y: _y,
     speedy: random(-4,4),
     speedx: random(1,8),
-    sz: random(2,6),
-    col: rgb(c.x, c.y, c.z)
+    sz: random(2,15),
+    col: rgb(c.x, 0, c.z)
+    // col: rgb(c.x, c.y, c.z)
   }
   particles.push(particle);
   if(particles.length > max_particles) {

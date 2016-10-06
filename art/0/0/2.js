@@ -1,56 +1,66 @@
 rbvj = function(){
 
   ctx.background(0);
-  pixel_size = 28;
-  ctx.lineWidth = 0.3;
-  samplesize = 8;
-  
-draw = function() {
+  pixel_size = 40;
+  ctx.lineWidth = 0.5;
+  var max_particles = 1500;
+  var particles = [];
+  ctx.strokeStyle = "white";
+  samplesize = 20;
 
-  motionDetection();
-  ctx.background(0, 0.1);
-  for (var j = 0; j < motion_array.length; j++) {
+  draw = function() {
 
-          var m = motion_array[j];
-          universe(m.x, m.y, m.z);
+    motionDetection();
+    ctx.background(0);
 
-        }
+    for (var j = 0; j < motion_array.length; j++) {
+
+      var m = motion_array[j];
+      var c = m.z;
+           
+      addParticle(m.x,m.y,c);
+      
+      
+      
+      
+  }
+  drawParticles();
+
+}
+
+function drawParticles(){
+  for (var i = 0; i < particles.length; i++) {
+    p = particles[i];
+    p.x += p.speedx;
+    p.y += p.speedy;
+    p.sz *= 0.95;
+    p.speedx -= 2.1;
+    ctx.fillStyle = p.col;
+    ctx.fillEllipse(p.x,p.y,p.sz,p.sz);
+    
+    
+    if (p.y > h || p.sz < 0.8) {
+      particles.splice(i,1);
     }
+
+  };
 }
 
-
-function universe(x, y, c){
-  
-  var b = brightness(c.x, c.y, c.z);
-  //console.log(c)
-  _num = 5;
-
-  for (var i = 0; i< _num; i++){
-    ctx.save();
-    ctx.fillstyle = rgba(c.x, c.y, c.z, 0.5);
-    
-    var n = x;
-    var m = y;
-    
-    n+= random(-50,50);
-    m+= random(-50,50);
-    var ww = w/random(10, 30);
-    ww+= random(-5,5);
-    ctx.translate(n, m);
-    
-    ctx.rotate(radians(b));
-    //ellipse(n, m, 80+w,80+w);
-    ctx.strokeStyle = rgb(c.x, c.y, c.z, 0.15);
-    ctx.line(-ww, -ww, ww, ww);
-    ctx.rotate(radians(-b));
-    ctx.restore();
-  } 
-
+function addParticle(_x,_y, c){
+  var particle = {
+    x: _x,
+    y: _y,
+    speedy: random(-4,4),
+    speedx: random(-2,-1),
+    sz: random(3,26),
+    col: rgb(c.x, c.y, c.z)
+  }
+  particles.push(particle);
+  if(particles.length > max_particles) {
+        particles.splice(0,1);
+      }
 }
 
-
-
-
-
+}
 rbvj();
 

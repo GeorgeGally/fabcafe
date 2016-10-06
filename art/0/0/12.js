@@ -3,12 +3,12 @@ rbvj = function(){
   ctx.background(0);
   pixel_size = 28;
   ctx.lineWidth = 0.3;
-  samplesize = 6;
+  samplesize = 8;
   
 draw = function() {
 
   motionDetection();
-  ctx.background(0, 0.05);
+  ctx.background(0, 0.1);
   for (var j = 0; j < motion_array.length; j++) {
 
           var m = motion_array[j];
@@ -34,15 +34,15 @@ function universe(x, y, c){
     
     n+= random(-50,50);
     m+= random(-50,50);
-    var ww = w/random(20, 40);
+    var ww = w/random(10, 30);
     ww+= random(-5,5);
     ctx.translate(n, m);
     
-    ctx.rotate(radians(b*1.8));
+    ctx.rotate(radians(b));
     //ellipse(n, m, 80+w,80+w);
-    ctx.strokeStyle = rgb(c.x, c.y, c.z, 0.15);
+    ctx.strokeStyle = rgb(c.x, c.y, c.z, 0.35);
     ctx.line(-ww, -ww, ww, ww);
-    ctx.rotate(radians(-b*1.8));
+    ctx.rotate(radians(-b));
     ctx.restore();
   } 
 
