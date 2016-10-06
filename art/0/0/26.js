@@ -11,7 +11,9 @@ rbvj = function(){
     motionDetection();
     ctx.background(0);
 
-    ctx.drawImage(video, 0,0, w, h);
+    ctx.scale(-1.0, 1.0);
+    ctx.drawImage(video, -w,0, w, h);
+    ctx.scale(-1.0, 1.0);
 
 
 }

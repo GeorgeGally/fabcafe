@@ -34,8 +34,8 @@ function drawParticles(){
     p = particles[i];
     p.x += p.speedx;
     p.y += p.speedy;
-    p.sz *= 0.95;
-    p.speedx += 5.1;
+    p.sz *= 0.99;
+    p.speedx += 4.1;
     ctx.fillStyle = p.col;
     ctx.fillEllipse(p.x,p.y,p.sz,p.sz);
     if (p.y > h || p.sz < 0.8) {
@@ -49,8 +49,8 @@ function addParticle(_x,_y, c){
     x: _x,
     y: _y,
     speedy: random(-2,2),
-    speedx: random(-21,-2),
-    sz: random(5,8),
+    speedx: random(-21,-5),
+    sz: random(3,7),
     col: rgb(c.x)
   }
   particles.push(particle);

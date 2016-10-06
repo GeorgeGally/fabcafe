@@ -3,9 +3,9 @@ rbvj = function(){
   ctx.background(0, 0.2);
   pixel_size = 40;
   ctx.lineWidth = 0.5;
-  var max_particles = 3500;
+  var max_particles = 2500;
   var particles = [];
-  samplesize = 20;
+  samplesize = 15;
 
   draw = function() {
 
@@ -31,6 +31,8 @@ rbvj = function(){
 }
 
 function drawParticles(){
+  //ctx.fillStyle = rgb(0, 200, 0);
+  ctx.fillStyle = "#fff200";
   for (var i = 0; i < particles.length; i++) {
     p = particles[i];
     p.x+=(p.target_x-p.x)/p.speedx;
@@ -39,10 +41,11 @@ function drawParticles(){
     // p.y += p.speedy;
     p.sz *= 0.8;
     //p.speedx += 5.1;
-    ctx.fillStyle = rgb(0, 200, 0);
+    
     ctx.fillEllipse(p.x,p.y,p.sz,p.sz);
-
-    if (p.y > h || p.sz < 0.8 || dist(p.x, p.y, p.target_x, p.target_y)<1) {
+    ctx.fillEllipse(p.target_x,p.target_y,p.sz*0.8,p.sz*0.8);
+    p.target_x += 0.8;
+    if (p.sz < 0.1 || dist(p.x, p.y, p.target_x, p.target_y)<0.1) {
       particles.splice(i,1);
     }
   };
@@ -50,8 +53,8 @@ function drawParticles(){
 
 function addParticle(_x,_y, c){
   var particle = {
-    target_x: _x,
-    target_y: _y,
+    target_x: _x + random(-samplesize/2,samplesize/2),
+    target_y: _y + random(-samplesize/2,samplesize/2),
     x: randomInt(w),
     y: randomInt(h),
     speedy: randomInt(5,20),

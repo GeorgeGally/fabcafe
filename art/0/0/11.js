@@ -46,7 +46,8 @@ function drawParticles(){
 
 function tail(p){
 
-    ctx.strokeStyle = rgba(255, 0.6);
+    // ctx.strokeStyle = rgba(255, 0.6);
+    ctx.strokeStyle = p.c;
     ctx.lineWidth = 0.4;
     if(p.tail.length > tail_length_max) {
             p.tail = p.tail.splice(p.tail.length - tail_length_max, p.tail.length);
@@ -78,15 +79,17 @@ function addParticle(_x,_y, c){
 
     if (_y<h/2) {
         diry = -1; 
+        speedy = diry*random(1,4)
     } else {
         diry = 1; 
+        speedy = diry*random(1,4)
     }
     var trail = [];
     var particle = {
     x: _x,
     y: _y,
-    speedy: diry*random(1,4),
-    speedx: dirx*random(1,8),
+    speedy: diry*random(-2,5),
+    speedx: dirx*random(-2,8),
     sz: random(2,6),
     tail: trail,
     col: rgb(c.x, c.y, c.z)
