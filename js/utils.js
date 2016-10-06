@@ -108,8 +108,8 @@ function reverseUint32 (uint32) {
 
 
 
-var vignette_img = new Image();
-vignette_img.src = '../rbvj/images/vignette.png';
+// var vignette_img = new Image();
+// vignette_img.src = '../rbvj/images/vignette.png';
 var vignette = function() {
   //ctx.drawImage(vignette_img,0, 0, window.innerWidth, window.innerHeight);
 }
