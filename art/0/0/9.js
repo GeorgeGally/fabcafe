@@ -53,9 +53,9 @@ function drawParticles(){
     //p.x += p.speedx;
     p.y += p.speedy;
     p.sz *= 1.15;
-    p.speedx += 1.1;
+    p.speedx += random(1);
     ctx.fillStyle = "black";
-    ctx.fillRect(p.x,p.y,p.sz, 2);
+    ctx.fillRect(p.x,p.y,p.sz, p.ht);
     if (p.y > h || p.sz > w || p.x > w) {
       particles.splice(i,1);
     }
@@ -70,7 +70,8 @@ function addParticle(_x,_y, c){
     speedy: random(-4,4),
     speedx: random(-5,-2),
     sz: random(3,6),
-    col: rgb(c.x)
+    col: rgb(c.x),
+    ht: random(1,4)
   }
   particles.push(particle);
   if(particles.length > max_particles) {

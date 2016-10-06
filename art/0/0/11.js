@@ -3,7 +3,7 @@ rbvj = function(){
   ctx.background(0, 0.2);
   pixel_size = 40;
   ctx.lineWidth = 0.5;
-  var max_particles = 2500;
+  var max_particles = 3500;
   var particles = [];
   samplesize = 15;
 
