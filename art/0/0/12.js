@@ -1,43 +1,56 @@
 rbvj = function(){
 
   ctx.background(0);
-  var frame = 0;
-  var counter = 0;
-  var imgs = [];
+  pixel_size = 28;
+  ctx.lineWidth = 0.3;
+  samplesize = 6;
   
-  for (var i = 0; i < 15; i++) {
-    imgs[i] =  new Image();
-    imgs[i].src = 'images/grey_eyes/eyes'+(i+1)+'.jpg';
-  };
-  
+draw = function() {
 
-  draw = function (){
-    
-    ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
-    
-    if (frame == 5 || frame == 12) {
-        
-      if (chance(6000)) {
-        
-        counter += 1;
-        frame = 5+Math.abs(Math.floor(Math.sin(counter)*9));
+  motionDetection();
+  ctx.background(0, 0.05);
+  for (var j = 0; j < motion_array.length; j++) {
 
-      }
+          var m = motion_array[j];
+          universe(m.x, m.y, m.z);
 
-    } else {
-
-      counter+=0.1;
-      frame = 5+Math.abs(Math.floor(Math.sin(counter)*9));
-    
+        }
     }
+}
+
+
+function universe(x, y, c){
+  
+  var b = brightness(c.x, c.y, c.z);
+  //console.log(c)
+  _num = 5;
+
+  for (var i = 0; i< _num; i++){
+    ctx.save();
+    ctx.fillstyle = rgba(c.x, c.y, c.z, 0.5);
     
-    ctx.drawImage(imgs[frame],0, 0, window.innerWidth*1.6, window.innerHeight);
-
+    var n = x;
+    var m = y;
     
-  }
-
-
+    n+= random(-50,50);
+    m+= random(-50,50);
+    var ww = w/random(20, 40);
+    ww+= random(-5,5);
+    ctx.translate(n, m);
+    
+    ctx.rotate(radians(b*1.8));
+    //ellipse(n, m, 80+w,80+w);
+    ctx.strokeStyle = rgb(c.x, c.y, c.z, 0.15);
+    ctx.line(-ww, -ww, ww, ww);
+    ctx.rotate(radians(-b*1.8));
+    ctx.restore();
+  } 
 
 }
 
+
+
+
+
 rbvj();
+

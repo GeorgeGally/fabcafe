@@ -7,7 +7,7 @@ rbvj = function(){
 draw = function() {
 
   	motionDetection();
-  	ctx.background(0);
+  	ctx.background(0, 0.1);
 
   	pixel_size = clamp(motion_array.length/50, 10, 100); 
  	for (var x = 0; x < w; x += pixel_size) {    

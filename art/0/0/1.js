@@ -27,7 +27,7 @@ draw = function() {
     
   //   for (var y = 0; y < h; y += pixel_size) { 
     
-      if (chance(340)) { 
+      if (chance(940)) { 
         ctx.fillRect(x , y, pixel_size, pixel_size);
         var x = Math.round(random(w)/pixel_size)*pixel_size; 
         var y = Math.round(random(h)/pixel_size)*pixel_size; 

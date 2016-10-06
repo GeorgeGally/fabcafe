@@ -159,6 +159,7 @@ function changeFile( thisKey ) {
 	if (fileref != undefined) document.getElementsByTagName("head")[0].removeChild(fileref);
 		
 		ctx.globalCompositeOperation = "source-over";
+		ctx.lineWidth = 1;
 		currentFile = thisKey-97;	 
 		console.log ("----- File: " + currentFile);
 		var loc = currentBank+ '/'+ currentSet +'/' +currentFile;
