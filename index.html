@@ -1,0 +1,254 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>RB Fab Cafe</title>
+
+<meta name="robots" content="all" />
+<meta name="description" content="Radarboy VJs" />
+	
+<meta property="og:image" content="http://radarboy.com/lab/previews/universe.jpg"/>
+<meta property="og:description" content="VJing in the browser - because you can. And should" />
+<meta name="twitter:description" content="VJing in the browser - because you can. And should" />
+<meta name="twitter:image" content="http://radarboy.com/lab/previews/universe.jpg" />
+
+<meta name="author" content="George Gally" />
+<meta name="Copyright" content="Copyright (c) Radarboy" />
+<meta name="keywords" content="radarboy, george gally, toys, javascript, webgl, 3D, threejs, art" />
+
+<script src="js/stats.min.js"></script>
+<!-- <script src="js/p5.js"></script>  -->
+<script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
+<script language="javascript" src="js/canvas.js"></script>
+<script language="javascript" src="js/creative.js"></script>
+<script language="javascript" src="js/vector.js"></script>
+<script language="javascript" src="js/vector_particles.js"></script>
+<script type="text/javascript" src="js/controlKit.min.js"></script>
+<script language="javascript" src="js/perlin_noise.js"></script>
+<script language="javascript" src="js/simplex-noise.js"></script>
+
+<script src="js/_maxiLib.js"></script>
+<script src="js/three.min.js"></script>
+<script language="javascript" src="js/video.js"></script>
+
+
+<!-- <script src="js/sound_generator.js"></script> -->
+
+<script src="js/filters.js"></script>
+<script src="js/randomColour.js"></script>
+
+<script src="js/html2canvas.js"></script>
+<script src="js/glitch.js"></script>
+
+<script src="js/utils.js"></script>
+  
+  <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="css/audio.css" type="text/css" media="screen" />
+
+</head>
+
+<body style="background:#000000">
+<div id="cover" width="1024px" height="800px"></div> 
+
+<div id="myProgress">
+  <div id="myBar"></div>
+</div> 
+
+<script type="text/javascript">
+    
+  var ctx = createCanvas("canvas1");
+
+
+  var box_size = new Vector(160,h);
+  var topLeft = new Vector(w/2-80, 0  );
+  var left = r1 = topLeft;
+
+  var bottomRight = new Vector(w/2+80, h);
+  var right = bottomRight;
+  
+   var r2 = box_size;
+
+ var elem = document.getElementById("myBar"); 
+  var bar_width = 1;
+
+  var background_data;
+  var camera_sensitivity = 12;
+  var master_volume = 0.5;
+
+  var vh = h
+  var counter = 0;
+  var half_counter = 0;
+  var pixel_counter = 0;
+  var pixel_fall_counter = 0;
+  var pixel_size = 10;
+  var block_colour = "black";
+  var data, background_data;
+  var ray_start = 6;
+  var ray_width = 6;
+  var ray_counter = 0;
+  var freqs = [440, 20, 20, 144, 440, 440, 220, 144];
+  var lowpass_res = 0.05;
+  var hipass_res = 0.18;
+  var pixelation = 0.03;
+
+
+var target_topLeft = new Vector(w,h);
+var target_bottomRight = new Vector(0,0);
+var scan_resolution = 10;
+var motionDection_on = false;
+var showBgImg = false;
+var showVideo = false;
+var motion_array = [];
+var showPixels = false;
+var controlKit = new ControlKit();
+
+  // var timer = function() {
+
+  //   var newfile = randomInt(files.length-1); 
+  //   newPage( files[newfile] );
+  //   move();
+  
+  // }
+
+
+function move() {
+    
+  bar_width = 1;
+  var id = setInterval(frame, 100);
+  
+  function frame() {
+
+  if (bar_width >= 100) {
+            clearInterval(id);
+            nextShow();
+        } else {
+          bar_width += 0.05; 
+          elem.style.width = bar_width + '%'; 
+          //controlKit.update();
+        }
+    }
+}
+
+var stages = 0;
+move();
+
+function nextShow(){
+  //stages = (stages + 1)%5;
+  //changeFile(stages+98);
+  samplesize = 10;
+  changeFile(randomInt(1,9)+98);
+  console.log("==== Next show");
+  move();
+}
+
+
+//setInterval(nextShow, 1*60*1000);
+
+
+var object = {
+
+  freq0: freqs[0],
+  freq1: freqs[1],
+  freq2: freqs[2],
+  freq3: freqs[3],
+  freq4: freqs[4],
+  freq5: freqs[5],
+  freq6: freqs[6],
+  freq7: freqs[7],
+  lowpass_res: lowpass_res,
+  master_volume: master_volume,
+  camera_sensitivity: camera_sensitivity,
+  hipass_res: hipass_res,
+  pixelation: pixelation,
+  pixel_size: pixel_size,
+  freq_range: [1, 2000],
+  pixel_range: [4, 40],
+  pixel_chance_range: [0, 20],
+  res_range: [0, 1]
+
+}
+
+
+
+// controlKit.addPanel({label: 'Control Panel', align: 'left', fixed: false, position: [w-250, 80], width: 200})
+//     .addSlider(object, 'freq0', 'freq_range', { label: 'Freq1', dp: 0, onChange: function(index){ 
+//         freqs[0] =  object.freq0;
+//          }})
+//     .addSlider(object, 'freq1', 'freq_range', { label: 'Freq2', dp: 0, onChange: function(index){ 
+//         freqs[1] =  object.freq1;
+//          }})
+
+// .addSlider(object, 'freq2', 'freq_range', { label: 'Freq3', dp: 0, onChange: function(index){ 
+//         freqs[2] =  object.freq2;
+//          }})
+
+// .addSlider(object, 'freq3', 'freq_range', { label: 'Freq4', dp: 0, onChange: function(index){ 
+//         freqs[3] =  object.freq3;
+//          }})
+
+// .addSlider(object, 'freq4', 'freq_range', { label: 'Freq5', dp: 0, onChange: function(index){ 
+//         freqs[4] =  object.freq4;
+//          }})
+
+// .addSlider(object, 'freq5', 'freq_range', { label: 'Freq6', dp: 0, onChange: function(index){ 
+//         freqs[5] =  object.freq5;
+//          }})
+
+// .addSlider(object, 'freq6', 'freq_range', { label: 'Freq6', dp: 0, onChange: function(index){ 
+//         freqs[6] =  object.freq6;
+//          }})
+
+// .addSlider(object, 'freq7', 'freq_range', { label: 'Freq8', dp: 0, onChange: function(index){ 
+//         freqs[7] =  object.freq7;
+//          }})
+// .addSlider(object, 'lowpass_res', 'res_range', { label: 'Lowpass Res', dp: 2, onChange: function(index){ 
+//         lowpass_res =  object.lowpass_res;
+//          }})
+// .addSlider(object, 'hipass_res', 'res_range', { label: 'Hipass Res', dp: 2, onChange: function(index){ 
+//         hipass_res =  object.hipass_res;
+//          }})
+// .addSlider(object, 'camera_sensitivity', 'pixel_range', { label: 'Sensitivity', dp: 0, onChange: function(index){ 
+//         camera_sensitivity =  object.camera_sensitivity;
+//          }})
+// .addSlider(object, 'pixel_size', 'pixel_range', { label: 'Pixel Size', dp: 0, onChange: function(index){ 
+//         pixel_size =  object.pixel_size;
+//         //console.log(pixel_size);
+//          }})
+
+// .addSlider(object, 'master_volume', 'res_range', { label: 'Volume', dp: 2, onChange: function(index){ 
+//         master_volume = object.master_volume;
+//         //console.log(pixel_size);
+//          }})
+
+</script>
+
+
+
+<!--  <script src="JS/maptastic.min.js"></script>
+ <script>
+    Maptastic("canvas1");
+ </script>
+ -->
+
+
+<script type="text/javascript">
+  
+  var stats = new Stats();
+var stats_container = document.createElement('stats');
+document.body.appendChild(stats_container);
+stats_container.appendChild( stats.domElement );
+stats.domElement.style.position = 'absolute';
+stats.domElement.style.zIndex = 999;
+stats.domElement.style.top = '0px';
+stats.domElement.style.left = '0px';
+
+</script>
+
+
+
+<script language="javascript" src="js/motion_detection.js"></script>
+<script language="javascript" src="js/darkness_detection.js"></script>
+<script type="text/javascript" src="js/do_keypress.js"></script>
+</body>
+</html>
